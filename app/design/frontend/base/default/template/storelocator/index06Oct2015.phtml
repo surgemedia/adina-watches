@@ -1,0 +1,43 @@
+<?php  require_once 'app/design/frontend/base/default/template/storelocator/config.phtml'; ?> 
+<table id="map_xxx" style="width:900px; border:10px;">
+<tr><td style="height: 500px; overflow: auto; display:block;" >
+<?php 
+while($row = $sql->fetch())
+{?>
+<table id="store-table" class="store-table" style="margin-bottom:10px;">
+<tr>
+<td class="left">
+<img src="<?php echo  Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).$row['image']; ?>" alt="<?php echo $row['name']; ?>" width="120" height="100" style="margin-right:5px;">
+</td>
+<td class="right" style="width:250px;">
+<table class="mintbl">
+<tr>
+<td>
+<h3 class="store_name"  onclick="map_xxx('<?php echo $row['lat']; ?>','<?php echo $row['longt']; ?>','<?php echo $row['address']; ?>');"><?php echo $row['name']; ?></h3>
+</td>
+</tr>
+<tr><td class="col-address"><?php echo $row['address']; ?></td></tr>
+<tr><td class="col-address">
+Zip Code : <?php echo $row['zipcode']; ?> &nbsp;,
+City : <?php echo $row['city']; ?> 
+</td></tr>
+<tr><td class="col-address">
+Country : <?php echo $row['country_id']; ?> &nbsp;,
+Phone : <?php echo $row['phone']; ?> 
+</td></tr>
+<tr><td>Fax :<?php echo $row['fax']; ?></td></tr>
+</table>
+</td>
+</tr>
+
+<tr><td colspan="2"> Website : <a href="<?php echo $row['store_url']; ?>" target="_blank"><?php echo $row['store_url']; ?></a></td></tr>
+<tr><td colspan="2"> <?php echo $row['description']; ?></td></tr>
+</table>
+<?php   }  ?>
+
+</td>
+
+<td style="width:500px;">
+<div id="map" style="width:500px; height:500px;"></div>
+</td></tr></table>
+ 

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Tallpaul_CategoryShipping>
+      <version>0.1.0</version>
+    </Tallpaul_CategoryShipping>
+  </modules>
+  <global>
+    <helpers>
+      <categoryshipping>
+        <class>Tallpaul_CategoryShipping_Helper</class>
+      </categoryshipping>
+    </helpers>
+	<models>
+	  <categoryshipping>
+		<class>Tallpaul_CategoryShipping_Model</class>
+		<resourceModel>categoryshipping_mysql4</resourceModel>
+	  </categoryshipping>
+	</models>
+	<resources>
+	  <categoryattribute1379261918_setup>
+		<setup>
+		  <module>Tallpaul_CategoryShipping</module>
+		  <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </categoryattribute1379261918_setup>
+	  <categoryattribute1379261918_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </categoryattribute1379261918_write>
+	  <categoryattribute1379261918_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </categoryattribute1379261918_read>
+	</resources>
+  </global>    
+	<default>
+        <carriers>
+            <categoryshipping>
+                <active>1</active>
+                <model>categoryshipping/carrier_categoryshipping</model>
+                <name>Shipping</name>
+                <title>Category Shipping</title>
+                <description>Shipping based on category rules</description>
+                <sort_order>0</sort_order>
+            </categoryshipping>
+        </carriers>
+    </default>
+</config> 

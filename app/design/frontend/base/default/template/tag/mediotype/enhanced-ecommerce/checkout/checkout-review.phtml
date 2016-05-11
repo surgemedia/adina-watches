@@ -1,0 +1,41 @@
+<?php
+/**
+ * Sends checkout data to Google Analytics
+ *
+ * @author  Joel Hart   @mediotype
+ * @var $this
+ */
+
+?>
+
+<script type="text/javascript">
+
+    var productFieldObject = {               // Provide product details in an productFieldObject.
+        'id': 'P12345',                   // Product ID (string).
+        'name': 'Android Warhol T-Shirt', // Product name (string).
+        'category': 'Apparel',            // Product category (string).
+        'brand': 'Google',                // Product brand (string).
+        'variant': 'black',               // Product variant (string).
+        'price': '29.20',                 // Product price (currency).
+        'quantity': 1                     // Product quantity (number).
+    };
+
+    ga('ec:addProduct', productFieldObject);
+
+    var actionFieldObject = {
+        'step': 1,
+        'option': 'Visa'
+    };
+
+    // Add the step number and additional info about the checkout to the action.
+    ga('ec:setAction','checkout', actionFieldObject);
+
+    // (On "Next" button click)
+    ga('ec:setAction', 'checkout_option', {'step': 2, 'option': 'FedEx'});
+
+    ga('send', 'event', 'Checkout', 'Option', {
+        hitCallback: function() {
+            // advance to next page
+        });
+
+</script>

@@ -1,0 +1,42 @@
+<?php
+/**
+ * Sends product view data to Google Enhanced Ecommerce Analytics
+ *
+ * @author  Dale Owen @mediotype
+ * @reference   https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce
+ * @var $this Mage_Checkout_Block_Cart
+ */
+$items = $this->getItems();
+?>
+<?php if(count($items) >= 1): ?>
+<script type="text/javascript">
+    //<![CDATA[
+    //change the remove button's onclick for each item in the cart
+    <?php $position = 0 ?>
+    <?php foreach($items as $item): ?>
+    var button = $('shopping-cart-table').down('tbody').down('tr',<?php echo $position++ ?>).down('.btn-remove');
+    button.originonclick = button.onclick;
+    button.onclick = function() {
+        <?php $product = $item->getProduct() ?>
+        ga('ec:addProduct', {
+            'id': '<?php echo $product->getId(); ?>',
+            'name': "<?php echo $product->getName(); ?>",
+            <?php if($product->getManufacturer()): ?>
+            'brand': "<?php echo $product->getManufacturer() ?>",
+            <?php endif; ?>
+            'price': '<?php echo $item->getPrice(); ?>',
+            'quantity': '<?php echo $item->getQty() ?>'
+        });
+        ga('ec:setAction', 'remove');
+        button.onclick = button.originonclick;
+        ga('send', 'event', 'UX', 'click', 'remove from cart',{
+            'hitCallback': function() {
+                button.click(button.originonclick);
+            }
+        });     // Send data using an event.
+    };
+
+    <?php endforeach; ?>
+    //]]>
+</script>
+<?php endif; ?>

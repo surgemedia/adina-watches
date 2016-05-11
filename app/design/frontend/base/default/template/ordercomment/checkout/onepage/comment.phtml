@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * Team23_OrderComment
+ *
+ * @category  Team23
+ * @package   Team23_OrderComment
+ * @version   1.0.0
+ * @copyright 2014 Team23 GmbH & Co. KG (http://www.team23.de)
+ * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
+ */
+
+?>
+
+<?php
+
+/** @var Team23_OrderComment_Block_Checkout_Comment $this */
+/** @var Team23_OrderComment_Helper_Data $_helper */
+$_helper = Mage::helper('ordercomment');
+
+?>
+
+<form id="co-customer-notice" action="">
+    <div class="customer-notice">
+        <div class="field customer-notice">
+            <label for="<?php print $this->getCommentFieldId(); ?>"><?php print $_helper->__('Customer notice'); ?></label>
+            <textarea id="<?php print $this->getCommentFieldId(); ?>" name="<?php print $this->getCommentFieldId(); ?>"></textarea>
+        </div>
+    </div>
+</form>

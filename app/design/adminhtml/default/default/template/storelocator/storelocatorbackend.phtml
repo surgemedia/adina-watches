@@ -1,0 +1,165 @@
+<script type="text/javascript">
+function validatestorelocator()
+{
+ 
+if( document.getElementById('mkscsv').value == "no" )
+{
+document.getElementById("mkscsv").style.borderColor="red";
+document.getElementById('mkscsv').focus() ;
+document.getElementById("mksmessage").style.display="block";
+
+
+return false;
+}
+      
+}
+
+
+function mksabout()
+{
+   if(document.getElementById("mksabout").style.display=="block")
+ {
+  document.getElementById("mksabout").style.display="none";
+  }else{
+   document.getElementById("mksabout").style.display="block";
+ }
+}
+</script>
+
+<?php $cssurl =  str_replace('index.php/','',$this->getBaseUrl()); 
+if($_REQUEST['mkscsv']=='storelocator')
+{
+
+$connection = Mage::getSingleton('core/resource')->getConnection('core_write'); 
+$path_info = pathinfo($file);
+$ex=$path_info['extension'];
+$file=$_FILES['file']['tmp_name'];
+//$handle = fopen("$file", "r");
+$handle1 = fopen($cssurl."media/storelocator/storelocator.csv", "r");
+$sucessrecord=0;
+$totalrecords=0;
+while (($data = fgetcsv($handle1,1000, ',')) !== FALSE)
+{
+if($sucessrecord>100)
+{  break; }
+$val1 = mysql_real_escape_string($data[0]);
+$val2 = mysql_real_escape_string($data[1]);
+$val3 = mysql_real_escape_string($data[2]);
+$val4 = mysql_real_escape_string($data[3]);
+$val5 = mysql_real_escape_string($data[4]);
+$val6 = mysql_real_escape_string($data[5]);
+$val7 = mysql_real_escape_string($data[6]);
+$val8 = mysql_real_escape_string($data[7]);
+$val9 = mysql_real_escape_string($data[8]);
+$val10 = mysql_real_escape_string($data[9]);
+$val11 = mysql_real_escape_string($data[10]);
+$val12 = mysql_real_escape_string($data[11]);
+$val13 = mysql_real_escape_string($data[12]);
+$val14 = mysql_real_escape_string($data[13]);
+$val15 = mysql_real_escape_string($data[14]);
+$val16 = mysql_real_escape_string($data[15]);
+
+
+	
+if($totalrecords!=0){
+if($val1!=''){
+
+
+$sqlmks = $connection->query("SELECT * FROM `mksstorelocator` WHERE `lat`='$val14'");
+$rows1=$sqlmks->fetch();
+if($rows1['lat']=='')
+{  
+	
+$sql = $connection->query("INSERT INTO `mksstorelocator` (`name`, `address`, `zipcode`, `city`, `country_id`, `phone`, `fax`, `description`, `store_url`, `image`, `tradinghours`,`Email`, `radius`, `lat`, `longt`, `status`) VALUES ('{$val1}','{$val2}','{$val3}','{$val4}','{$val5}','{$val6}','{$val7}','{$val8}','{$val9}','{$val10}','{$val11}','{$val12}','{$val13}','{$val14}','{$val15}','{$val16}' )" ); 
+
+$sucessrecord++;
+}
+
+
+}} 
+
+$totalrecords++;
+}
+
+
+if($sql)
+{ ?>
+<table style="margin:auto; width:500px; padding:10px;">
+<tr><td align="center" style="color:green; pedding:10px; font-size:16px;" colspan="2"> CSV Record Uploaded Successfully </td></tr>
+<tr>
+<td align="left" style="pedding-right:100px; font-size:12px;"> <?php echo 'Total Records = '.$totalrecords; ?> </td>
+<td align="right" style="color:green; pedding-right:10px; font-size:12px;"> <?php echo 'Success Records = '.$sucessrecord; ?> </td>
+</tr></table>
+<?php  } else { ?>
+<table style="margin:auto; width:500px; padding:10px;">
+<tr><td align="center" style="color:red; pedding:10px; font-size:16px;" colspan="2"> CSV Record not unique </td></tr>
+<tr>
+<td align="left" style="pedding-right:100px; font-size:12px;"> <?php echo 'Total Records = '.$totalrecords; ?> </td>
+<td align="right" style="color:green; pedding-right:10px; font-size:12px;"> <?php echo 'Success Records = '.$sucessrecord; ?> </td>
+</tr>
+</table>
+<?php } } ?>
+
+
+<table style="border:5px #EB5E00 solid; margin:auto; width:500px; padding:10px;">
+<tr><td align="center"><b>One Time Uploding only 100 Record's</b> <a href="mailto:in.mukeshsaini@gmail.com?subject=Store locator Bulk Record Uploading&body=Website URL : <?php echo $cssurl; ?>" style="color:#EB5E00;"> More </a></td></tr>
+<tr><td align="center">
+<form method="get"   enctype="multipart/form-data">
+<select name="mkscsv" id="mkscsv">
+<option value="no"> -Select- </option>
+<option value="storelocator"> media/storelocator/storelocator.csv  </option>
+</select>
+<input type="submit" name="submit" value=" Start Uploding " onclick="return validatestorelocator();">
+</form>
+<div align="center" style="display:none; color:red; pedding:2px;" id="mksmessage"> Select " media/storelocator/storelocator.csv " File </div>
+</td></tr>
+</table>
+ 
+ 
+
+<table border="0" align="center" style="margin-top:20px;"> 
+<tr><td style="padding-bottom:10px;">
+<div style="float:left; font-size:18px; padding-right:10px;">How to Upload CSV </div>
+<div style="float:left; font-size:15px; color:#EB5E00;"> ( <a href="<?php echo $cssurl; ?>media/storelocator/csvformat/storelocator.csv.zip"> Download storelocator.csv format </a> ) </div>
+  
+</td></tr>
+<tr><td>
+<h3>If you want to ulpoad your Store informatiom CSV Then Follow the following instrunctions : <h3>
+</td></tr>
+<tr><td>
+</td></tr>
+<tr><td>
+<b>
+1.  upolad a CSV in "/media/storelocator" directory with the filename "storelocator.csv". With the required fileds. </b>
+</td></tr>
+<tr><td>
+<b>
+2.  Then "About Us page" below the store loctore tab in main menu. and then select the file in drop down and then clik on uploading button. </b>
+</td></tr>
+<tr><td>
+</td></tr>
+
+<tr><td>
+<b>3. Upload new Store images in this directory "media/storelocator/storelocator". (Name Should not be repeated) </b>
+</td></tr>
+<tr><td>
+</td></tr>
+<tr><td>
+<b>Note: You can download Example CSV from the backend "About Us page" below the store loctore tab in main menu. </b>
+</td></tr>
+
+
+<tr><td>
+<img src="<?php echo $cssurl; ?>skin/frontend/base/default/storelocatore/img/csvimg.jpg" width="100%"/>
+</td></tr>
+</table>
+
+
+
+<table style="margin:auto; width:500px; margin-top:20px;">
+<tr><td align="center" style="color:#EB5E00; pedding:10px; font-size:16px;" onclick="mksabout();"> Developer Profile </td></tr>
+</table>
+
+<iframe style="display:none;" id="mksabout" src="http://www.magentocommerce.com/magento-connect/developer/mukeshsaini"  width="100%" height="1000"></iframe>
+
+ 

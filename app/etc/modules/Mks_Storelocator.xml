@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Mks_Storelocator>
+      <active>true</active>
+      <codePool>community</codePool>
+      <version>8.1.1</version>
+    </Mks_Storelocator>
+  </modules>
+</config>

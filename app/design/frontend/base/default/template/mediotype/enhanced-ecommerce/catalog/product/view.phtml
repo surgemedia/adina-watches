@@ -1,0 +1,57 @@
+<?php
+/**
+ * Sends product view data to Google Enhanced Ecommerce Analytics
+ *
+ * @author  Joel Hart @mediotype
+ * @reference   https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce
+ * @var $this Mediotype_EnhancedEcommerce_Block_Catalog_Product_View
+ */
+$product = $this->getCurrentProduct();
+$category = $product->getCategory();
+?>
+<script type="text/javascript">
+    //<![CDATA[
+
+    var productFieldObject = {
+        "id"        : "<?php echo $product->getId(); ?>",
+        "name"      : "<?php echo $product->getName(); ?>",
+        <?php if($product->getManufacturer()): ?>
+        'brand': "<?php echo $product->getManufacturer() ?>",
+        <?php endif; ?>
+        <?php if($category): ?>
+        "category"  : "<?php echo $category->getName(); ?>",
+        <?php endif; ?>
+        "price"     : "<?php echo $product->getPrice(); ?>"
+    };
+    //        'dimension1': 'Member'            // Custom dimension (string).
+    // TODO - integrate once product dimensions config have been created
+
+    ga('ec:addProduct', productFieldObject);
+    ga('ec:setAction', 'detail');
+    //this should only grab this product's add to cart button
+    $$('.product-shop .btn-cart').each(function(item) {
+        item.originonclick = item.onclick;
+        item.onclick = function() {
+            ga('ec:addProduct', {
+                'id': '<?php echo $product->getId(); ?>',
+                'name': "<?php echo $product->getName(); ?>",
+                <?php if($category): ?>
+                "category"  : "<?php echo $category->getName(); ?>",
+                <?php endif; ?>
+                <?php if($product->getManufacturer()): ?>
+                'brand': "<?php echo $product->getManufacturer() ?>",
+                <?php endif; ?>
+                'price': '<?php echo $product->getPrice(); ?>',
+                'quantity': $('qty').value
+            });
+            ga('ec:setAction', 'add');
+            item.onclick = item.originonclick;
+            ga('send', 'event', 'UX', 'click', 'add to cart',{
+                'hitCallback': function() {
+                    item.click(item.originonclick);
+                }
+            });     // Send data using an event.
+        }
+    });
+    //]]>
+</script>

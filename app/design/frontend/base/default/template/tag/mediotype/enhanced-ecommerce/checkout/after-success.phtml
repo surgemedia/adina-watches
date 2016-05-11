@@ -1,0 +1,47 @@
+<?php
+/**
+ * Sends complete order information to Google Analytics
+ *
+ * @author Joel Hart @mediotype
+ * @var $this Mediotype_EnhancedEcommerce_Block_Checkout_AfterSuccess
+ */
+/** @var $order Mage_Sales_Model_Order */
+$order = $this->getOrder();
+$totals = $this->getTotals();
+?>
+
+<script type="text/javascript">
+    var order_value = '<?php echo $totals->getAmount(); ?>';
+    var order_id = '<?php echo $order->getIncrementId(); ?>';
+</script>
+
+<script type="text/javascript">
+
+    <?php $i=0; foreach($order->getItemsCollection() as $item): ?>
+    <?php /** @var $item Mage_Sales_Model_Order_Item */
+          /** @var $product Mage_Catalog_Model_Product */ ?>
+    <?php $product = Mage::getModel('catalog/product')->load($item->getProductId()); ?>
+    var productFieldObject<?php echo $i ?> = {
+        'id': '<?php echo $item->getProductId()?>',
+        'name': '<?php echo $item->getName()?>',
+        'brand': '<?php echo $product->getAttributeText('manufacturer') ?>',
+        'price': '<?php echo $item->getPrice()?>',
+        'coupon': '<?php echo $order->getDiscountDescription() ?>',
+        'quantity': '<?php echo $item->getQtyOrdered() ?>'
+    };
+    ga('ec:addProduct', productFieldObject<?php echo $i ?>);
+    <?php $i++; endforeach; ?>
+
+    var actionFieldObject = {
+        'id': order_id,
+        'affiliation': '<?php echo Mage::app()->getStore()->getName(); ?>',
+        'revenue': order_value,
+        'tax': '<?php echo $totals->getTax() ?>',
+        'shipping': '<?php echo $totals->getShipping() ?>',
+        'coupon': '<?php echo $order->getDiscountDescription() ?>'
+    };
+
+    ga('ec:setAction', 'purchase', actionFieldObject);
+    ga('send', 'event', 'Ecommerce', 'Purchase', order_value);
+
+</script>

@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * Team23_OrderComment
+ *
+ * @category  Team23
+ * @package   Team23_OrderComment
+ * @version   1.0.0
+ * @copyright 2014 Team23 GmbH & Co. KG (http://www.team23.de)
+ * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
+ */
+-->
+
+<config>
+    <modules>
+        <Team23_OrderComment>
+            <version>1.0.0</version>
+        </Team23_OrderComment>
+    </modules>
+
+    <global>
+        <models>
+            <ordercomment>
+                <class>Team23_OrderComment_Model</class>
+            </ordercomment>
+        </models>
+
+        <blocks>
+            <ordercomment>
+                <class>Team23_OrderComment_Block</class>
+            </ordercomment>
+        </blocks>
+
+        <helpers>
+            <ordercomment>
+                <class>Team23_OrderComment_Helper</class>
+            </ordercomment>
+        </helpers>
+    </global>
+
+    <frontend>
+        <events>
+            <checkout_type_onepage_save_order>
+                <observers>
+                    <ordercomment>
+                        <type>singleton</type>
+                        <class>ordercomment/observer</class>
+                        <method>addCustomerCommentToOrder</method>
+                    </ordercomment>
+                </observers>
+            </checkout_type_onepage_save_order>
+        </events>
+
+        <layout>
+            <updates>
+                <ordercomment>
+                    <file>ordercomment.xml</file>
+                </ordercomment>
+            </updates>
+        </layout>
+
+        <translate>
+            <modules>
+                <Team23_OrderComment>
+                    <files>
+                        <default>Team23_OrderComment.csv</default>
+                    </files>
+                </Team23_OrderComment>
+            </modules>
+        </translate>
+    </frontend>
+</config>

@@ -1,0 +1,51 @@
+<?php
+/**
+ * Sends product view data to Google Enhanced Ecommerce Analytics
+ *
+ * @author  Dale Owen @mediotype
+ * @reference   https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce
+ * @var $this Mage_Catalog_Block_Product_List_Related
+ */
+$items = $this->getItems();
+$current_category = Mage::registry('current_category');
+?>
+<?php if($this->getItems()->getSize()): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        <?php $position = 0 ?>
+        <?php foreach($items as $item): ?>
+        ga('ec:addImpression', {
+            'id': '<?php echo $item->getId() ?>',
+            'name': "<?php echo $item->getName() ?>",
+            <?php if($current_category): ?>
+            'category': "<?php echo $current_category->getName() ?>",
+            <?php endif; ?>
+            'list': 'Related Products',
+            'position': '<?php echo ++$position ?>'
+        });
+        //add click analysis to the links
+        var links = $$('#block-related > li:nth-child(<?php echo $position ?>) a');
+        links.each(function(link){
+            link.onclick = function() {
+                var productFieldObject = {
+                    'id': '<?php echo $item->getId() ?>',// Product ID (string).
+                    'name': "<?php echo $item->getName() ?>",
+                    <?php if($current_category): ?>
+                    'category': "<?php echo $current_category->getName() ?>",
+                    <?php endif; ?>
+                    'position': '<?php echo $position ?>'
+                };
+                ga('ec:addProduct', productFieldObject);
+                ga('ec:setAction', 'click',{list: 'Related Products'});
+                ga('send', 'event', 'UX', 'click', 'Related Products',{
+                    'hitCallback': function() {
+                        document.location = link.href;
+                    }
+                });
+            };
+        });
+
+        <?php endforeach; ?>
+        //]]>
+    </script>
+<?php endif; ?>

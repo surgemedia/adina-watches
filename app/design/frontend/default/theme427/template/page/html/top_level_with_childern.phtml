@@ -1,0 +1,47 @@
+<?php
+function checkParent($id){
+	$display = true;
+$category_model = Mage::getModel('catalog/category'); 
+  $_category = $category_model->load($id); 
+  $all_child_categories = $category_model->getResource()->getAllChildren($_category);
+  if(count($all_child_categories) == 1){ $display = false;}
+	return $display;
+	}
+
+function getKids($id){
+$display = true;
+$category_model = Mage::getModel('catalog/category'); 
+  $_category = $category_model->load($id); 
+  $all_child_categories = $category_model->getResource()->getAllChildren($_category);
+  if(count($all_child_categories) == 1){ $display = false;}
+  //print_r($all_child_categories);
+ 
+  $links = array();
+  $names = array();
+  if($display) { echo "<ul>";}
+  for ($i = 1; $i < count($all_child_categories); ++$i) {
+	  $cat = Mage::getModel('catalog/category')->load($all_child_categories[$i]);
+	
+	echo "<li class='".$i." nav-1"."-".($i+1)."'><a href='".$cat->getUrl()."' ><span>".$cat->getName()."</span></a></li>"; }
+	if($display) { echo "</ul>";}
+}
+?>
+<?php $_helper = Mage::helper('catalog/category') ?>
+<?php $_categories = $_helper->getStoreCategories() ?>
+<?php if (count($_categories) > 0): ?>
+    
+        <?php foreach($_categories as $_category): ?>
+        	<?php $id = $_category->getId(); ?>
+            <li class="level0 level-top <?php if(checkParent($id)){ echo "parent";} ?>">
+                <a  href="<?php echo $_helper->getCategoryUrl($_category) ?>">
+                    <span><?php echo $_category->getName() ?></span>
+                </a>
+                
+                <?php  
+						getKids($id);
+					   ?>
+                
+            </li>
+        <?php endforeach; ?>
+    
+<?php endif; ?>

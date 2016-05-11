@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Tallpaul_CategoryShipping>
+      <active>true</active>
+      <codePool>local</codePool>            
+	        <depends>
+                <Mage_Shipping />
+            </depends>
+      <version>0.1.0</version>
+    </Tallpaul_CategoryShipping>
+  </modules>
+</config>

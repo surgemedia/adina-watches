@@ -1,0 +1,62 @@
+<?php
+/**
+ * Sends product view data to Google Enhanced Ecommerce Analytics
+ *
+ * @author  Dale Owen @mediotype
+ * @reference   https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce
+ * @var $this Mage_Checkout_Block_Cart_Crosssell
+ */
+$items = $this->getItems();
+?>
+<?php if($this->getItemCount()): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        <?php $position = 0 ?>
+        <?php foreach($items as $item): ?>
+        ga('ec:addImpression', {
+            'id': '<?php echo $item->getId() ?>',
+            'name': "<?php echo $item->getName() ?>",
+            'list': 'Cross Sell Products',
+            'position': '<?php echo ++$position ?>'
+        });
+        //add click analysis to the links
+        var links = $$('#crosssell-products-list > li:nth-child(<?php echo $position ?>) a');
+        links.each(function(link){
+            link.onclick = function() {
+                var productFieldObject = {
+                    'id': '<?php echo $item->getId() ?>',
+                    'name': "<?php echo $item->getName() ?>",
+                    'position': '<?php echo $position ?>'
+                };
+                ga('ec:addProduct', productFieldObject);
+                ga('ec:setAction', 'click',{list: 'Cross Sell Products'});
+                ga('send', 'event', 'UX', 'click', 'Cross Sell Products',{
+                    'hitCallback': function() {
+                        document.location = link.href;
+                    }
+                });
+            };
+        });
+        //add click analysis to add to cart
+        var button = $('crosssell-products-list').down('> li', <?php echo $position - 1 ?>).down('.btn-cart');
+        button.originonclick = button.onclick;
+        button.onclick = function() {
+            ga('ec:addProduct', {
+                'id': '<?php echo $item->getId(); ?>',
+                'name': "<?php echo $item->getName(); ?>",
+                'price': '<?php echo $item->getPrice(); ?>',
+                'quantity': '1'
+            });
+            ga('ec:setAction', 'add');
+            button.onclick = button.originonclick;
+            ga('send', 'event', 'UX', 'click', 'add to cart',{
+                'hitCallback': function() {
+                    button.click(button.originonclick);
+                }
+            });
+        };
+
+        <?php endforeach; ?>
+        //]]>
+    </script>
+<?php endif; ?>

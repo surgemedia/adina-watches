@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * Team23_OrderComment
+ *
+ * @category  Team23
+ * @package   Team23_OrderComment
+ * @version   1.0.0
+ * @copyright 2014 Team23 GmbH & Co. KG (http://www.team23.de)
+ * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
+ */
+-->
+
+<layout version="0.1.0">
+    <checkout_onepage_index>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/team23/ordercomment.css</stylesheet>
+            </action>
+        </reference>
+
+        <reference name="checkout.onepage.review">
+            <action method="setTemplate">
+                <template>ordercomment/checkout/onepage/review.phtml</template>
+            </action>
+        </reference>
+    </checkout_onepage_index>
+
+    <checkout_onepage_review>
+        <setTemplate>
+
+        </setTemplate>
+        <reference name="checkout.onepage.review.info.items.before">
+            <block type="ordercomment/checkout_comment" name="order.comment" as="ordercomment" before="-"
+                   template="ordercomment/checkout/onepage/comment.phtml"/>
+        </reference>
+    </checkout_onepage_review>
+</layout>
